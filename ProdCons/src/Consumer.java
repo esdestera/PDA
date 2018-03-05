@@ -11,6 +11,7 @@ public class Consumer implements Runnable {
 
 
 	public void run() {
+		while(true){
 		if(!queue.isEmpty()) {
 			synchronized (queue) {
 				int number = queue.remove();
@@ -20,6 +21,7 @@ public class Consumer implements Runnable {
 		else {
 				System.out.println("There are not elements in the queue");
 			}
+	}
 	}
 }
 
