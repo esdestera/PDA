@@ -17,7 +17,7 @@ public class Producer implements Runnable {
 
 	@Override
 	public void run() {
-		whie(true){
+		while(true){
 		if(queue.size() < n) {
 			synchronized (queue) {
 				int number = rand.nextInt(n);
