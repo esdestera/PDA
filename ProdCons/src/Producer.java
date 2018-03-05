@@ -17,6 +17,7 @@ public class Producer implements Runnable {
 
 	@Override
 	public void run() {
+		whie(true){
 		if(queue.size() < n) {
 			synchronized (queue) {
 				int number = rand.nextInt(n);
@@ -25,8 +26,9 @@ public class Producer implements Runnable {
 			}
 		}
 		else {
-			System.out.println("The queue is full, wait to sunsume first");
+			System.out.println("The queue is full, wait to consume first");
 		}
+	}
 	}
 
 }
