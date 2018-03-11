@@ -15,17 +15,23 @@ public class Producer implements Runnable {
 
 	@Override
 	public void run() {
+		int number = 0;
 		while (true) {
-			if (queue.size() < n) {
-				synchronized (queue) {
-					int number = rand.nextInt(n);
-					queue.add(number);
-					System.out.println("Produced " + number);
+			number = rand.nextInt(n);
+			synchronized (queue) {
+				while (queue.size() == n) {
+					System.out.println("The queue is full");
 				}
-			} else {
-				System.out.println("The queue is full, wait to consume first");
+
+				queue.add(number);
+				System.out.println("Produced " + number);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
-
 }
