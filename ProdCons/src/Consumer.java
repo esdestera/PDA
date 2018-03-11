@@ -9,16 +9,16 @@ public class Consumer implements Runnable {
 	}
 
 	public void run() {
+		int number = 0;
 		while (true) {
-			if (!queue.isEmpty()) {
-				synchronized (queue) {
-					int number = queue.remove();
-					System.out.println("Consumed " + number);
+			synchronized (queue) {
+				while (queue.isEmpty()) {
+					System.out.println("There queue is empty");
 				}
-			} else {
-				System.out.println("There are not elements in the queue");
+
+				number = queue.remove();
+				System.out.println("Consumed " + number);
 			}
 		}
 	}
 }
-
