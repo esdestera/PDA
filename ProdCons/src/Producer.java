@@ -6,29 +6,26 @@ public class Producer implements Runnable {
 	Queue<Integer> queue;
 	int n;
 	Random rand = new Random();
-	
+
 	public Producer(Queue<Integer> queue, int n) {
 		super();
 		this.queue = queue;
-		this.n= n;
+		this.n = n;
 	}
-
-
 
 	@Override
 	public void run() {
-		while(true){
-		if(queue.size() < n) {
-			synchronized (queue) {
-				int number = rand.nextInt(n);
-				queue.add(number);
-				System.out.println("Produced " + number);
+		while (true) {
+			if (queue.size() < n) {
+				synchronized (queue) {
+					int number = rand.nextInt(n);
+					queue.add(number);
+					System.out.println("Produced " + number);
+				}
+			} else {
+				System.out.println("The queue is full, wait to consume first");
 			}
 		}
-		else {
-			System.out.println("The queue is full, wait to consume first");
-		}
-	}
 	}
 
 }
