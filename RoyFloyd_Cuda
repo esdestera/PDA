@@ -1,0 +1,58 @@
+
+#define N 5
+#define INF 999999
+
+__global__ void RoyFloyd(int matr[N][N], int k, int j){
+	
+	int threadId = blockIdx.x * blockDim.x + threadIdx.x;
+   
+	if( matr[threadId][k] + matr[k][j] < matr[threadId][j]){
+		matr[threadId][j] = matr[threadId][k] + matr[k][j];
+	}
+	
+}
+
+int main()
+{
+    size_t size = N * N* sizeof(int);
+
+    int h_matr[N][N] = {
+		0,3,9,8,3,
+		5,0,1,4,2,
+		6,6,0,4,5,
+		2,9,2,0,7,
+		7,9,3,2,0,
+	};
+	
+
+    // Allocate vectors in device memory
+    float d_math[N][N];
+    cudaMalloc(&d_matr, size);
+
+    // Copy vectors from host memory to device memory
+    cudaMemcpy(d_matr, h_matr, size, cudaMemcpyHostToDevice);
+
+    // Invoke kernel
+    dim3 threadsPerBlock(N, N);
+    int numBlocks = 1;
+	int i, j;
+	for(i =0; i< N; i++){
+		for(j = 0; j< N; j++){
+			RoyFloyd<<<numBlocks, threadsPerBlock>>>(d_matr, i, j);
+		}
+	}
+   
+    cudaMemcpy(h_matr, d_matr, size, cudaMemcpyDeviceToHost);
+	
+	for(i =0; i< N; i++){
+		for(j = 0; j<N; j++){
+			if(h_matr[i][j] == INF){
+				cout<<INF;
+			}
+			else{
+				cout<<h_matr[i][j];
+			}
+		}
+	}
+ 
+}
