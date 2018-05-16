@@ -2,13 +2,18 @@
 #define N 5
 #define INF 999999
 
-__global__ void RoyFloyd(int matr[N][N], int k, int j){
+__global__ void RoyFloyd(int matr[N][N]){
 	
 	int threadId = blockIdx.x * blockDim.x + threadIdx.x;
-   
-	if( matr[threadId][k] + matr[k][j] < matr[threadId][j]){
-		matr[threadId][j] = matr[threadId][k] + matr[k][j];
+	int i, j;
+	for(i =0; i< N; i++){
+		for(j = 0; j< N; j++){
+			if( matr[threadId][k] + matr[k][j] < matr[threadId][j]){
+				matr[threadId][j] = matr[threadId][k] + matr[k][j];
+			}
+		}
 	}
+	
 	
 }
 
@@ -35,13 +40,9 @@ int main()
     // Invoke kernel
     dim3 threadsPerBlock(N, N);
     int numBlocks = 1;
-	int i, j;
-	for(i =0; i< N; i++){
-		for(j = 0; j< N; j++){
-			RoyFloyd<<<numBlocks, threadsPerBlock>>>(d_matr, i, j);
-		}
-	}
-   
+	
+	RoyFloyd<<<numBlocks, threadsPerBlock>>>(d_matr);
+	
     cudaMemcpy(h_matr, d_matr, size, cudaMemcpyDeviceToHost);
 	
 	for(i =0; i< N; i++){
